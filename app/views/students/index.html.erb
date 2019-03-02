@@ -8,7 +8,11 @@
 
   <% @students.each do |student| %>
     <tr>
-      <td><%= student.name %></td>
+      <% if @students_name_hash[student.firstname].eql?(1) %>
+        <td><%= student.name %></td>
+      <% else %>
+        <td><%= student.name_with_initial %></td>
+      <% end %>
       <td><%= student.movie %></td>
     </tr>
   <% end %>
