@@ -2,33 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import ReactTable from "react-table";
 import 'react-table/react-table.css';
+import StudentList from 'components/StudentList'
+import AddStudent from 'components/add-student'
+import EditStudent from 'components/edit-student'
+import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+
 
 class Student extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-     data: []
-    }
-    this.studentList = this.studentList.bind(this);
-  }
-
-  componentDidMount() {
-    this.studentList();
-  }
-
-  studentList() {
-    $.ajax({
-      method: 'GET',
-      url: '/students',
-      dataType: 'JSON'
-    }).done(function(studentList) {
-      this.setState({ data: studentList });
-    }.bind(this)).fail(function(xhr, status, err) {
-      console.log('Error')
-    }.bind(this));
-  }
-
 
   render () {
     const columns = [{
@@ -41,11 +21,13 @@ class Student extends React.Component {
 
     return (
       <div>
-        <ReactTable
-          data={this.state.data}
-          columns={columns}
-          defaultPageSize={10}
-        />
+        <Router>
+          <Switch>
+            <Route path="/students/js" exact component={StudentList}/>
+            <Route path="/students/js/new" exact component={AddStudent} />
+            <Route path="/students/js/edit/:id" exact component={EditStudent} />
+          </Switch>
+        </Router>
       </div>
     );
   }

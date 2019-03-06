@@ -1,4 +1,6 @@
 class Student < ActiveRecord::Base
+  validates :firstname, :favoritemovie, presence: true
+
   scope :filter, lambda { |movie|
     return if movie.nil?
     where('Lower(favoritemovie) =?', movie)
