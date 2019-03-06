@@ -13,12 +13,15 @@ class StudentList extends React.Component {
      data: [],
      deleteId: '',
      modalPopOpen: false,
+     searchText: '',
+     filtered: []
     }
     this.studentList = this.studentList.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.deleteRecord = this.deleteRecord.bind(this);
     this.cancel = this.cancel.bind(this);
+    this.filterStudentList = this.filterStudentList.bind(this);
   }
 
   componentDidMount() {
@@ -69,6 +72,22 @@ class StudentList extends React.Component {
     this.setState({ modalPopOpen: false });
   }
 
+  filterStudentList() {
+    let updatedList = this.state.data;
+    if(event.target.value != '') {
+      updatedList = updatedList.filter(function(item){
+        return item.firstname.toLowerCase().search(
+          event.target.value.toLowerCase()) !== -1;
+      });
+    } else {
+      updatedList = this.state.data;
+    }
+    this.setState({
+      filtered: updatedList,
+      searchText: event.target.value,
+    });
+  }
+
   render () {
     const columns = [{
       Header: 'Name',
@@ -91,9 +110,10 @@ class StudentList extends React.Component {
 
     return (
       <div>
+        Filter Student: <input value={this.state.searchText} onChange={this.filterStudentList} />
         <Link to="/students/js/new" replace>Add Student</Link>
         <ReactTable
-          data={this.state.data}
+          data={ this.state.filtered != '' ? this.state.filtered : this.state.data }
           columns={columns}
           defaultPageSize={10}
         />
